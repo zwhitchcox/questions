@@ -25,7 +25,7 @@ acorn-dynamic-import@^3.0.0:
   dependencies:
     acorn "^5.0.0"
 
-acorn@^5.0.0, acorn@^5.5.3:
+acorn@^5.0.0, acorn@^5.5.0, acorn@^5.5.3:
   version "5.5.3"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.5.3.tgz#f473dd47e0277a08e28e9bec5aeeb04751f0b8c9"
 
@@ -615,6 +615,10 @@ braces@^1.8.2:
     expand-range "^1.8.1"
     preserve "^0.2.0"
     repeat-element "^1.1.2"
+
+buffer-es6@^4.9.3:
+  version "4.9.3"
+  resolved "https://registry.yarnpkg.com/buffer-es6/-/buffer-es6-4.9.3.tgz#f26347b82df76fd37e18bcb5288c4970cfd5c404"
 
 builtin-modules@^2.0.0:
   version "2.0.0"
@@ -1226,6 +1230,10 @@ private@^0.1.6:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"
 
+process-es6@^0.11.6:
+  version "0.11.6"
+  resolved "https://registry.yarnpkg.com/process-es6/-/process-es6-0.11.6.tgz#c6bb389f9a951f82bd4eb169600105bd2ff9c778"
+
 promise@^7.1.1:
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/promise/-/promise-7.3.1.tgz#064b72602b18f90f29192b8b1bc418ffd1ebd3bf"
@@ -1358,6 +1366,23 @@ rollup-plugin-commonjs@^9.1.0:
     estree-walker "^0.5.1"
     magic-string "^0.22.4"
     resolve "^1.5.0"
+    rollup-pluginutils "^2.0.1"
+
+rollup-plugin-json@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-json/-/rollup-plugin-json-2.3.0.tgz#3c07a452c1b5391be28006fbfff3644056ce0add"
+  dependencies:
+    rollup-pluginutils "^2.0.1"
+
+rollup-plugin-node-globals@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-node-globals/-/rollup-plugin-node-globals-1.2.0.tgz#1a7ff0eb988430cfd76a12fb35767374b49a6d31"
+  dependencies:
+    acorn "^5.5.0"
+    buffer-es6 "^4.9.3"
+    estree-walker "^0.5.1"
+    magic-string "^0.22.4"
+    process-es6 "^0.11.6"
     rollup-pluginutils "^2.0.1"
 
 rollup-plugin-node-resolve@^3.3.0:
