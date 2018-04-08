@@ -1,0 +1,21 @@
+
+{
+  "presets": [
+    [ "es2015",
+      {
+        "modules": false
+      }
+    ],
+    [ "env",
+    {
+      "modules": false
+    }
+    ],
+    "react"
+  ],
+  "plugins": [
+    "transform-decorators-legacy",
+    "external-helpers"
+  ],
+  "sourceMaps": "both"
+}
