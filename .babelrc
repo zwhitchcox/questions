@@ -15,6 +15,7 @@
   ],
   "plugins": [
     "transform-decorators-legacy",
+    "transform-class-properties",
     "external-helpers"
   ],
   "sourceMaps": "both"
