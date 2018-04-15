@@ -17,6 +17,12 @@ export default function attach({dir, app}) {
   app.get('/questions', (req, res) => {
     res.end(JSON.stringify(questions))
   })
+  app.delete('/questions/:id', (req, res) => {
+    if (questions[req.params.id]) delete questions[req.params.id]
+  })
+  app.put('/questions', (req, res) => {
+    questions[req.body.id] = req.body.data
+  })
 }
 
 export function get_data(dir) {

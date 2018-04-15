@@ -20,6 +20,7 @@ const sbmt_style = {
   @observable question = ''
   @observable answer = ''
   @observable questions = []
+  @observable questions_map = []
 
   submit = () => {
     const qa = {
@@ -37,10 +38,28 @@ const sbmt_style = {
       .then(id => this.questions.push(qa))
       .then(console.log)
   }
+  delete(i) {
+    const key = this.questions_map[i]
+    fetch('/questions/' + key, {
+      headers: new Headers({
+        'content-type': 'application/json',
+      }),
+      method: 'DELETE',
+    })
+    this.questions_map.splice(i, 1)
+    this.questions.splice(i, 1)
+  }
   componentWillMount() {
     fetch('/questions')
       .then(res => res.json())
-      .then(questions => this.questions = toArray(questions))
+      .then(questions => {
+        const new_arr = []
+        for (const id in questions) {
+          this.questions_map.push(id)
+          new_arr.push(questions[id])
+        }
+        this.questions = new_arr
+      })
       .catch(console.error)
   }
 
@@ -59,7 +78,9 @@ const sbmt_style = {
       </Paper>
       questions<br />
       <ul>
-        {this.questions.map(q => <li>{JSON.stringify(q)}</li>)}
+        {this.questions.map((q, i) => <li onClick={() => this.delete(i)} key={i}>
+          {JSON.stringify(q)}
+        </li>)}
       </ul>
       </div>
     </MuiThemeProvider>
