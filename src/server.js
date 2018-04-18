@@ -11,5 +11,6 @@ db({
 })
 app.use(express.static(path.resolve(__dirname, '../build/public')))
 app.use(express.static(__dirname + '/static'))
+app.use((req, res) => res.sendFile(__dirname + '/static/index.html'))
 
 app.listen(3000, () => console.log('Listening on 3000'))

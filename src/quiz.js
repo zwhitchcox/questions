@@ -7,6 +7,7 @@ import {observer} from "mobx-react"
 
   render() {
     return <div>
+      hello
     </div>
   }
 }

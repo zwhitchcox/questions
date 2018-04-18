@@ -1,5 +1,5 @@
 import {observable} from 'mobx'
 
 export const store = observable({
-  route: '/'
+  route: window.location.pathname
 })
