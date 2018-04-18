@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {observable} from 'mobx'
+import { observable, toJS } from 'mobx'
 import {observer} from "mobx-react"
 import {Paper, TextField, RaisedButton} from 'material-ui'
 import { store } from './store'
@@ -15,8 +15,10 @@ const sbmt_style = {
 }
 
 @observer export default class Edit extends React.Component {
-  @observable question = ''
-  @observable answer = ''
+  @observable qa = {
+    question: "",
+    answer: "",
+  }
   componentWillMount() {
     store.subscribe(['questions', 'chapters'])
   }
@@ -26,11 +28,11 @@ const sbmt_style = {
       <h2 className="header">Add Question</h2>
       <Paper style={ppr_style} zDepth={2}>
       <div>
-      <TextField onChange={e => this.question = e.target.value} value={this.question} floatingLabelText="Question" fullWidth={true} multiLine={true} rows={4} /><br />
-      <TextField onChange={e => this.answer = e.target.value} value={this.answer} floatingLabelText="Answer" fullWidth={true}/><br />
+      <TextField onChange={e => this.qa.question = e.target.value} value={this.qa.question} floatingLabelText="Question" fullWidth={true} multiLine={true} rows={4} /><br />
+      <TextField onChange={e => this.qa.answer = e.target.value} value={this.qa.answer} floatingLabelText="Answer" fullWidth={true}/><br />
       {this.answer}
       
-      <RaisedButton style={sbmt_style} onClick={()=> store.add_question(this.question, this.answer)}>Add Question</RaisedButton>
+      <RaisedButton style={sbmt_style} onClick={() => store.questions.push(toJS(this.qa))}>Add Question</RaisedButton>
       </div>
       </Paper>
       questions<br />

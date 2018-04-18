@@ -1,4 +1,4 @@
-import { observable, action, extendObservable } from 'mobx'
+import { observable, action, extendObservable, observe, transaction, toJS } from 'mobx'
 
 export const store = observable({
   route: window.location.pathname,
@@ -14,18 +14,21 @@ export const store = observable({
     extendObservable(store, {
       [field]: []
     })
-    console.log(store[field])
     store.maps[field] = []
     return fetch(`/db/${field}`)
       .then(res => res.json())
       .then(rows => {
-        for (const id in rows) {
-          store.maps[field].push(id)
-          store[field].push(rows[id])
-        }
+        transaction(() => {
+          for (const id in rows) {
+            store.maps[field].push(id)
+            store[field].push(rows[id])
+          }
+        })
+        observe(store[field], mirror(field))
       })
       .catch(console.error)
   },
+  
 
   add_question(question, answer) {
     const qa = {
@@ -56,27 +59,30 @@ export const store = observable({
     this.questions.splice(i, 1)
   },
 
-  add_chapter(chapter) {
-    fetch('/db/chapters', {
+})
+
+export function mirror(field){
+  return event => {
+    event.added.forEach(add(field))
+  }
+}
+export function add(field) {
+  return value => {
+    fetch(`/db/${field}`, {
       headers: new Headers({
         'content-type': 'application/json',
       }),
       method: 'POST',
-      body: chapter
+      body: (value === Object(value)) ? JSON.stringify(value) : value,
     })
-      .then(res => res.text())
-      .then(id => this.chapters.push(chapter))
-      .then(console.log)
-  },
+  }
+}
 
-  remove_chapter(i) {
-    fetch('/db/chapters/' + key, {
-      headers: new Headers({
-        'content-type': 'application/json',
-      }),
-      method: 'DELETE',
-    })
-  },
-})
-
-
+export function remove(i) {
+  fetch('/db/chapters/' + key, {
+    headers: new Headers({
+      'content-type': 'application/json',
+    }),
+    method: 'DELETE',
+  })
+}
