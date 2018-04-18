@@ -4,6 +4,7 @@ export const store = observable({
   route: window.location.pathname,
   chapter: [],
   questions: [],
+  questions_map: [],
   chapters: [],
 
   add_question(question, answer) {
@@ -60,7 +61,8 @@ export const store = observable({
 
 
 fetch('/db/questions')
-  .then(res => res.json())
+  .then(res => res.text())
+  .then(console.log)
   .then(questions => {
     const new_arr = []
     for (const id in questions) {

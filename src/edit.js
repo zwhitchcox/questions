@@ -20,7 +20,7 @@ const sbmt_style = {
 
   render() {
     return <div>
-      <h2 class="header">Add Question</h2>
+      <h2 className="header">Add Question</h2>
       <Paper style={ppr_style} zDepth={2}>
       <div>
       <TextField onChange={e => this.question = e.target.value} value={this.question} floatingLabelText="Question" fullWidth={true} multiLine={true} rows={4} /><br />
@@ -36,19 +36,19 @@ const sbmt_style = {
           {JSON.stringify(q)}
         </li>)}
       </ul>
-      <h2 class="header">Add Chapter</h2>
+      <h2 className="header">Add Chapter</h2>
       <Paper style={ppr_style} zDepth={2}>
       <div>
       <TextField onChange={e => this.chapter = e.target.value} value={this.chapter} floatingLabelText="Chapter" fullWidth={true}/><br />
       {this.chapter}
       
-      <RaisedButton style={sbmt_style} onClick={()=> store.add_chapter(this.chapter)}>Add Question</RaisedButton>
+      <RaisedButton style={sbmt_style} onClick={()=> store.add_chapter(this.chapter)}>Add Chapter</RaisedButton>
       </div>
       </Paper>
       chapters<br />
       <ul>
         {store.chapters.map((q, i) => <li onClick={() => store.remove_chapter(i)} key={i}>
-          {i + ": " q}
+          {i + ": " + q}
         </li>)}
       </ul>
       </div>
