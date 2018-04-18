@@ -20,20 +20,35 @@ const sbmt_style = {
 
   render() {
     return <div>
-      <h2 id="header">Add Question</h2>
+      <h2 class="header">Add Question</h2>
       <Paper style={ppr_style} zDepth={2}>
       <div>
       <TextField onChange={e => this.question = e.target.value} value={this.question} floatingLabelText="Question" fullWidth={true} multiLine={true} rows={4} /><br />
       <TextField onChange={e => this.answer = e.target.value} value={this.answer} floatingLabelText="Answer" fullWidth={true}/><br />
       {this.answer}
       
-      <RaisedButton style={sbmt_style} onClick={()=> store.add(this.question, this.answer)}>Add Question</RaisedButton>
+      <RaisedButton style={sbmt_style} onClick={()=> store.add_question(this.question, this.answer)}>Add Question</RaisedButton>
       </div>
       </Paper>
       questions<br />
       <ul>
-        {store.questions.map((q, i) => <li onClick={() => store.remove(i)} key={i}>
+        {store.questions.map((q, i) => <li onClick={() => store.remove_question(i)} key={i}>
           {JSON.stringify(q)}
+        </li>)}
+      </ul>
+      <h2 class="header">Add Chapter</h2>
+      <Paper style={ppr_style} zDepth={2}>
+      <div>
+      <TextField onChange={e => this.chapter = e.target.value} value={this.chapter} floatingLabelText="Chapter" fullWidth={true}/><br />
+      {this.chapter}
+      
+      <RaisedButton style={sbmt_style} onClick={()=> store.add_chapter(this.chapter)}>Add Question</RaisedButton>
+      </div>
+      </Paper>
+      chapters<br />
+      <ul>
+        {store.chapters.map((q, i) => <li onClick={() => store.remove_chapter(i)} key={i}>
+          {i + ": " q}
         </li>)}
       </ul>
       </div>
