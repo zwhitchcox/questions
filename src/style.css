@@ -14,3 +14,8 @@ h2 {
   border-bottom: 1px solid #eee;
   font-weight: 400;
 }
+
+a {
+  color: blue;
+  cursor: pointer;
+}
