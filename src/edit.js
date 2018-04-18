@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import {observable} from 'mobx'
 import {observer} from "mobx-react"
 import {Paper, TextField, RaisedButton} from 'material-ui'
+import { store } from './store'
 
 const ppr_style = {
   margin: "2%",
@@ -16,49 +17,6 @@ const sbmt_style = {
 @observer export default class Edit extends React.Component {
   @observable question = ''
   @observable answer = ''
-  @observable questions = []
-  @observable questions_map = []
-
-  submit = () => {
-    const qa = {
-      question: this.question,
-      answer: this.answer,
-    }
-    fetch('/db/questions', {
-      headers: new Headers({
-        'content-type': 'application/json',
-      }),
-      method: 'POST',
-      body: JSON.stringify(qa)
-    })
-      .then(res => res.text())
-      .then(id => this.questions.push(qa))
-      .then(console.log)
-  }
-  delete(i) {
-    const key = this.questions_map[i]
-    fetch('/db/questions/' + key, {
-      headers: new Headers({
-        'content-type': 'application/json',
-      }),
-      method: 'DELETE',
-    })
-    this.questions_map.splice(i, 1)
-    this.questions.splice(i, 1)
-  }
-  componentWillMount() {
-    fetch('/questions')
-      .then(res => res.json())
-      .then(questions => {
-        const new_arr = []
-        for (const id in questions) {
-          this.questions_map.push(id)
-          new_arr.push(questions[id])
-        }
-        this.questions = new_arr
-      })
-      .catch(console.error)
-  }
 
   render() {
     return <div>
@@ -69,12 +27,12 @@ const sbmt_style = {
       <TextField onChange={e => this.answer = e.target.value} value={this.answer} floatingLabelText="Answer" fullWidth={true}/><br />
       {this.answer}
       
-      <RaisedButton style={sbmt_style} onClick={this.submit}>Add Question</RaisedButton>
+      <RaisedButton style={sbmt_style} onClick={()=> store.add(this.question, this.answer)}>Add Question</RaisedButton>
       </div>
       </Paper>
       questions<br />
       <ul>
-        {this.questions.map((q, i) => <li onClick={() => this.delete(i)} key={i}>
+        {store.questions.map((q, i) => <li onClick={() => store.remove(i)} key={i}>
           {JSON.stringify(q)}
         </li>)}
       </ul>
