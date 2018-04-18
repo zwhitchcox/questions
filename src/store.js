@@ -1,11 +1,31 @@
-import { observable, action } from 'mobx'
+import { observable, action, extendObservable } from 'mobx'
 
 export const store = observable({
   route: window.location.pathname,
-  chapter: [],
-  questions: [],
-  questions_map: [],
-  chapters: [],
+  maps: [],
+  subscribed: observable.map({}),
+
+  subscribe(field) {
+    if (Array.isArray(field)) {
+      return Promise.all(field.map(this.subscribe))
+    }
+    if (store.subscribed.get(field)) return
+    store.subscribed.set(field, true)
+    extendObservable(store, {
+      [field]: []
+    })
+    console.log(store[field])
+    store.maps[field] = []
+    return fetch(`/db/${field}`)
+      .then(res => res.json())
+      .then(rows => {
+        for (const id in rows) {
+          store.maps[field].push(id)
+          store[field].push(rows[id])
+        }
+      })
+      .catch(console.error)
+  },
 
   add_question(question, answer) {
     const qa = {
@@ -60,22 +80,3 @@ export const store = observable({
 })
 
 
-fetch('/db/questions')
-  .then(res => res.text())
-  .then(console.log)
-  .then(questions => {
-    const new_arr = []
-    for (const id in questions) {
-      store.questions_map.push(id)
-      new_arr.push(questions[id])
-    }
-    store.questions = new_arr
-  })
-  .catch(console.error)
-
-fetch('/db/chapters')
-  .then(res => res.json())
-  .then(chapters => {
-    store.chapters
-  })
-  .catch(console.error)

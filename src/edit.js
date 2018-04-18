@@ -17,6 +17,9 @@ const sbmt_style = {
 @observer export default class Edit extends React.Component {
   @observable question = ''
   @observable answer = ''
+  componentWillMount() {
+    store.subscribe(['questions', 'chapters'])
+  }
 
   render() {
     return <div>
