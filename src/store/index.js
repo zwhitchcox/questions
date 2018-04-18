@@ -28,46 +28,18 @@ export const store = observable({
       })
       .catch(console.error)
   },
-  
-
-  add_question(question, answer) {
-    const qa = {
-      question,
-      answer,
-    }
-    fetch('/db/questions', {
-      headers: new Headers({
-        'content-type': 'application/json',
-      }),
-      method: 'POST',
-      body: JSON.stringify(qa)
-    })
-      .then(res => res.text())
-      .then(id => this.questions.push(qa))
-      .then(console.log)
-  }, 
-
-  remove_question(i) {
-    const key = this.questions_map[i]
-    fetch('/db/questions/' + key, {
-      headers: new Headers({
-        'content-type': 'application/json',
-      }),
-      method: 'DELETE',
-    })
-    this.questions_map.splice(i, 1)
-    this.questions.splice(i, 1)
-  },
-
 })
 
 export function mirror(field){
   return event => {
-    event.added.forEach(add(field))
+    event.added.forEach(add(field, event.index))
+    store.maps[field]
+      .splice(event.index, event.removedCount)
+      .forEach(remove(field))
   }
 }
-export function add(field) {
-  return value => {
+export function add(field, main_index) {
+  return (value, i) => {
     fetch(`/db/${field}`, {
       headers: new Headers({
         'content-type': 'application/json',
@@ -75,14 +47,20 @@ export function add(field) {
       method: 'POST',
       body: (value === Object(value)) ? JSON.stringify(value) : value,
     })
+      .then(res => res.text())
+      .then(id => {
+        store.maps[field].splice(main_index + i, 0, id)
+      })
   }
 }
 
-export function remove(i) {
-  fetch('/db/chapters/' + key, {
-    headers: new Headers({
-      'content-type': 'application/json',
-    }),
-    method: 'DELETE',
-  })
+export function remove(field) {
+  return key => {
+    fetch(`/db/${field}/${key}`, {
+      headers: new Headers({
+        'content-type': 'application/json',
+      }),
+      method: 'DELETE',
+    })
+  }
 }

@@ -37,7 +37,7 @@ const sbmt_style = {
       </Paper>
       questions<br />
       <ul>
-        {store.questions.map((q, i) => <li onClick={() => store.remove_question(i)} key={i}>
+        {store.questions.map((q, i) => <li onClick={() => store.questions.splice(i, 1)} key={i}>
           {JSON.stringify(q)}
         </li>)}
       </ul>
