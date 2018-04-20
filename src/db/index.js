@@ -5,6 +5,7 @@ const store = {}
 
 export default function attach({dir, app}) {
   app.use(body_parser.json())
+  app.use(body_parser.text())
   app.post('/db/:field', (req, res) => {
     const id = uuid()
     const { field } = req.params
@@ -28,9 +29,12 @@ export default function attach({dir, app}) {
       .then(() => res.end(id))
       .catch(() => res.status(500).end('Unable to write data - server error'))
   })
-  app.put('/db/:field', (req, res) => {
+  app.put('/db/:field/:id', (req, res) => {
     const { field, id } = req.params
-    questions[req.body.id] = req.body.data
+    store[field][id] = req.body
+    write_data(dir, field)
+      .then(() => res.end(id))
+      .catch(() => res.status(500).end('Unable to write data - server error'))
   })
 }
 

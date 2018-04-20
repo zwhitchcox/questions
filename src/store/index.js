@@ -32,20 +32,25 @@ export const store = observable({
 
 export function mirror(field){
   return event => {
-    event.added.forEach(add(field, event.index))
-    store.maps[field]
-      .splice(event.index, event.removedCount)
-      .forEach(remove(field))
+    if (event.type === 'splice') {
+      event.added.forEach(add(field, event.index))
+      store.maps[field]
+        .splice(event.index, event.removedCount)
+        .forEach(remove(field))
+    } else {
+      update(field, event.index)
+    }
   }
 }
 export function add(field, main_index) {
   return (value, i) => {
+    const is_json = value === Object(value)
     fetch(`/db/${field}`, {
       headers: new Headers({
-        'content-type': 'application/json',
+        'content-type': is_json ? 'application/json' : 'text/plain',
       }),
       method: 'POST',
-      body: (value === Object(value)) ? JSON.stringify(value) : value,
+      body: (is_json) ? JSON.stringify(value) : value,
     })
       .then(res => res.text())
       .then(id => {
@@ -63,4 +68,16 @@ export function remove(field) {
       method: 'DELETE',
     })
   }
+}
+
+export function update(field, i) {
+  const value = toJS(store[field][i])
+  const is_json = value === Object(value)
+  fetch(`/db/${field}/${store.maps[field][i]}`, {
+    headers: new Headers({
+      'content-type': is_json ? 'application/json' : 'text/plain',
+    }),
+    method: 'PUT',
+    body: (value === Object(value)) ? JSON.stringify(value) : value,
+  })
 }
