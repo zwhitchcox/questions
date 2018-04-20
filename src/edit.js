@@ -25,6 +25,7 @@ const sbmt_style = {
   @observable chapter = ""
   @observable editing_qa = false
   @observable editing_chapter = false
+  @observable filter
 
   componentWillMount() {
     store.subscribe(['questions', 'chapters'])
@@ -46,8 +47,8 @@ const sbmt_style = {
     this.qa = {
       question: "",
       answer: "",
-      reference_1: "",
-      reference_2: "",
+      reference_1: "IRC ",
+      reference_2: "IBC ",
       chapter: this.qa.chapter,
     }
   }
@@ -84,11 +85,14 @@ const sbmt_style = {
             {this.editing_qa ? 'Edit' : 'Add'} Question</RaisedButton>
         </form>
       </Paper>
+        <DropDownMenu onChange={(e, i, value) => this.filter = value} value={this.filter || ""}>
+        {store.chapters.map((ch, i) => <MenuItem value={ch} primaryText={ch} key={i} />)}
+      </DropDownMenu>
       questions<br />
       <ul>
-        {store.questions.map((q, i) => <li  key={i}>
-          <span onClick={()=> this.edit_qa(i)}><pre>{JSON.stringify(q, true, 2)}</pre></span>
-          <RaisedButton onClick={() => store.questions.splice(i, 1)}>X</RaisedButton>
+        {store.questions.filter(qa => !this.filter || qa.chapter === this.filter).map((q, i) => <li  key={i}>
+          <span onClick={()=> this.edit_qa(store.questions.indexOf(q))}><pre>{JSON.stringify(q, true, 2)}</pre></span>
+          <RaisedButton onClick={() => store.questions.splice(store.questions.indexOf(q), 1)}>X</RaisedButton>
       </li>)}
     </ul>
     <h2 className="header">Add Chapter</h2>
