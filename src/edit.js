@@ -38,6 +38,7 @@ const sbmt_style = {
   }
 
   submit_qa() {
+    if (this.qa.chapter==="") return
     if (this.editing_qa) {
       store.questions[this.edit_qa_i] = this.qa
     } else {
@@ -85,7 +86,7 @@ const sbmt_style = {
             {this.editing_qa ? 'Edit' : 'Add'} Question</RaisedButton>
         </form>
       </Paper>
-        <DropDownMenu onChange={(e, i, value) => this.filter = value} value={this.filter || ""}>
+        <DropDownMenu onChange={(e, i, value) => this.filter = value} value={this.filter || ""} required={true}>
         {store.chapters.map((ch, i) => <MenuItem value={ch} primaryText={ch} key={i} />)}
       </DropDownMenu>
       questions<br />
